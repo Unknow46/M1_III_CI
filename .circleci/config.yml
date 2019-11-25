@@ -7,5 +7,5 @@ jobs:
          - checkout
          - run: echo "hellow world"
          - run: yarn global add node-gyp && yarn install
-         - save_cache:
+         - restore_cache:
              key: CACHE_VERSION-dependencies-{{ checksum "package.json" }}
