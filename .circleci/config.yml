@@ -16,17 +16,25 @@ jobs:
             paths:
               - node_modules
             key: dependencies-{{ .Environment.CACHE_VERSION}}-{{ checksum "package.json" }}
-     lint: 
-       steps:
-          - run: yarn lint
-          - run: yarn format:check
-     unit_test:
-       steps:
-          - run: yarn test:ci
+  lint:
+    docker:
+      - image: circleci/node:dubnium
+    steps:
+      - run: checkout
+      - run: yarn lint
+      - run: yarn format:check
+  unit_test:
+    docker: circleci/node:dubnium
+    steps:
+      - run: yarn test:ci
 
 workflow:
    jobs:
      - install
-     - lint
-     - unit_test
+     - lint:
+       requires:
+         - build
+     - unit_test:
+       requires:
+         - build
      
