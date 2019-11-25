@@ -27,7 +27,7 @@ jobs:
 
 workflow:
    jobs:
-     - build-and-test
+     - install
      - lint
      - unit_test
      
