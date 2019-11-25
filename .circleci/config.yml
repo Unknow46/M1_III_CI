@@ -1,3 +1,4 @@
+version: 2.1
 install:
     docker:
       - image: circleci/node:dubnium
