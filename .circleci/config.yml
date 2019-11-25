@@ -42,6 +42,29 @@ jobs:
             - dependencies-
       - run: yarn test:ci
 
+  postgres:
+    docker:
+      - image: circleci/postgres:9.6.5
+  test_postgres:
+    docker:
+      -image: circleci/node:dubnium
+      working_directory: ~/repo
+      steps:
+        - checkout
+        - restore_cache:
+            keys:
+              - dependencies-{{ checksum "package.json" }}-{{ .Environment.CACHE_VERSION }}
+              # fallback to using the latest cache if no exact match is found
+              - dependencies-
+        - run:
+            command: yarn test:e2e
+            environment:
+              DATABASE_URL: postgres://psqluer:psqlpassword@localhost:5432/psdb
+              JWT_SECRET: imalive
+              API_PORT: 3000
+              API_HOST: localhost
+              API_PROTOCOL: http
+
 workflows:
   version: 2
   build-and-test:
@@ -53,3 +76,9 @@ workflows:
       - unit_test:
           requires:
             - install
+      - postgres:
+          requires:
+            - lint
+      - test_postgres:
+          requires:
+            - postgres
