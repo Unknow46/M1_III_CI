@@ -43,14 +43,14 @@ jobs:
       - run: yarn test:ci
 
 workflows:
-   version: 2
-   build-and-test:
-     jobs:
-       - install
-       - lint:
-           requires:
-             - install
-       - unit_test:
-           requires:
-             - install
+  version: 2
+  build-and-test:
+    jobs:
+      - install
+      - lint:
+          requires:
+            - install
+      - unit_test:
+          requires:
+            - install
      
