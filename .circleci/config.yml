@@ -29,7 +29,8 @@ jobs:
       - run: yarn lint
       - run: yarn format:check
   unit_test:
-    docker: circleci/node:dubnium
+    docker:
+      image: circleci/node:dubnium
     steps:
       - checkout
       - restore_cache:
