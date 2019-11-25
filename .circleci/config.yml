@@ -1,6 +1,6 @@
 version: 2.1
 jobs:
-  build-and-test:
+  build:
       docker:
         - image: circleci/node:dubnium
       working_directory: ~/repo
@@ -27,9 +27,7 @@ jobs:
 
 workflow:
    jobs:
-     build-and-test:
-       jobs:
-         - build-and-test
-         - lint
-         - unit_test
+     - build-and-test
+     - lint
+     - unit_test
      
