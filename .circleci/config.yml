@@ -10,7 +10,7 @@ jobs:
             keys:
               - dependencies-{{ checksum "package.json" }}-{{ .Environment.CACHE_VERSION }}
             # fallback to using the latest cache if no exact match is found
-              - $CACHE_VERSION-dependencies-
+              - dependencies-
         - run: yarn global add node-gyp && yarn install
         - save_cache:
             paths:
@@ -26,7 +26,7 @@ jobs:
             keys:
               - dependencies-{{ checksum "package.json" }}-{{ .Environment.CACHE_VERSION }}
             # fallback to using the latest cache if no exact match is found
-              - $CACHE_VERSION-dependencies-
+              - dependencies-
       - run: yarn lint
       - run: yarn format:check
   unit_test:
@@ -39,7 +39,7 @@ jobs:
             keys:
               - dependencies-{{ checksum "package.json" }}-{{ .Environment.CACHE_VERSION }}
             # fallback to using the latest cache if no exact match is found
-              - $CACHE_VERSION-dependencies-
+              - dependencies-
       - run: yarn test:ci
 
 workflows:
