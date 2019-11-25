@@ -8,11 +8,11 @@ jobs:
         - checkout
         - restore_cache:
             keys:
-              - {{ .Environement.CACHE_VERSION}}-dependencies-{{ checksum "package.json" }}
+              - {{ .Environnement.CACHE_VERSION}}-dependencies-{{ checksum "package.json" }}
             # fallback to using the latest cache if no exact match is found
               - $CACHE_VERSION-dependencies-
         - run: yarn global add node-gyp && yarn install
         - save_cache:
             paths:
               - node_modules
-            key: {{ .Environement.CACHE_VERSION}}-dependencies-{{ checksum "package.json" }}
+            key: {{ .Environnement.CACHE_VERSION}}-dependencies-{{ checksum "package.json" }}
