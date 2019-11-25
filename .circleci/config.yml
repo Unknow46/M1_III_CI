@@ -42,12 +42,13 @@ jobs:
 
 workflows:
    version: 2
-   jobs:
-     - install
-     - lint:
-         requires:
-           - install
-     - unit_test:
-         requires:
-           - install
+   build-and-test:
+     jobs:
+       - install
+       - lint:
+           requires:
+             - install
+       - unit_test:
+           requires:
+             - install
      
