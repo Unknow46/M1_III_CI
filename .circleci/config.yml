@@ -1,6 +1,6 @@
 version: 2.1
 jobs:
-  build:
+  install:
       docker:
         - image: circleci/node:dubnium
       working_directory: ~/repo
@@ -43,11 +43,11 @@ jobs:
 workflows:
    version: 2
    jobs:
-     - build
+     - install
      - lint:
          requires:
-           - build
+           - install
      - unit_test:
          requires:
-           - build
+           - install
      
