@@ -44,6 +44,8 @@ jobs:
   postgres:
     docker:
       - image: circleci/postgres:9.6.5
+    steps:
+      - checkout
   test_postgres:
     docker:
       -image: circleci/node:dubnium
