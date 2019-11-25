@@ -40,13 +40,14 @@ jobs:
               - $CACHE_VERSION-dependencies-
       - run: yarn test:ci
 
-workflow:
+workflows:
+   version: 2
    jobs:
      - install
      - lint:
-       requires:
-         - install
+         requires:
+           - install
      - unit_test:
-       requires:
-         - install
+         requires:
+           - install
      
