@@ -1,6 +1,6 @@
 version: 2.1
 jobs:
-  build:
+  build-and-test:
       docker:
         - image: circleci/node:dubnium
       working_directory: ~/repo
@@ -17,6 +17,19 @@ jobs:
               - node_modules
             key: dependencies-{{ .Environment.CACHE_VERSION}}-{{ checksum "package.json" }}
 
+     lint: 
+       steps:
+          - run: yarn lint
+          - run: yarn format:check
+     unit_test:
+       steps:
+          - run: yarn test:ci
+
 workflow:
    jobs:
-     install
+     build-and-test:
+       jobs:
+         - build-and-test
+         - lint
+         - unit_test
+     
