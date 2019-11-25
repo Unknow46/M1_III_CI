@@ -45,8 +45,8 @@ workflow:
      - install
      - lint:
        requires:
-         - build
+         - install
      - unit_test:
        requires:
-         - build
+         - install
      
