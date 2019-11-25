@@ -6,3 +6,4 @@ jobs:
       steps:
          - checkout
          - run: echo "hellow world"
+         - run: yarn global add node-gyp && yarn install
