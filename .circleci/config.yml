@@ -1,5 +1,5 @@
 version: 2.1
-install:
+build:
     docker:
       - image: circleci/node:dubnium
     working_directory: ~/repo
