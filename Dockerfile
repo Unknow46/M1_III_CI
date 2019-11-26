@@ -1,3 +1,5 @@
 FROM busybox:latest
 
-ADD M1_III_CI /M1_III_CI
+RUN mkdir /app
+
+COPY . /app
