@@ -1,4 +1,4 @@
-FROM busybox:latest
+FROM node:dubnium
 RUN apt update
 RUN mkdir /app
 COPY . /app
