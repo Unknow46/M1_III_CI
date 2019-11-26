@@ -19,7 +19,8 @@ jobs:
             - node_modules
           key: dependencies-{{ checksum "package.json" }}-{{ .Environment.CACHE_VERSION }}
       - store_artifacts:
-          path: /server-doc/artifacts-install
+          path: ~/repo
+          destination: server-doc/artifacts-install
   lint:
     docker:
       - image: circleci/node:dubnium
