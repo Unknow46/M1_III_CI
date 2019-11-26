@@ -65,6 +65,21 @@ jobs:
             API_PORT: 3000
             API_HOST: localhost
             API_PROTOCOL: http
+  Docker:
+    docker:
+      - image: circleci/node:dubnium
+     working_directory: ~/repo
+     steps:
+       - checkout
+       - restore_cache:
+          keys:
+            - dependencies-{{ checksum "package.json" }}-{{ .Environment.CACHE_VERSION }}
+            # fallback to using the latest cache if no exact match is found
+            - dependencies-
+       - run: |
+           echo "$DOCKER_PASS" | docker login --username $DOCKER_USER --password-stdin
+       - run: docker build -t natsens/my-awesome-ci-expr:$CIRCLE_BUILD_NUM
+       - run: docker push natsens/my-awesome-ci-expr
 
 workflows:
   version: 2
@@ -78,5 +93,8 @@ workflows:
           requires:
             - install
       - postgres:
+          requires:
+            - lint
+      - Docker:
           requires:
             - lint
