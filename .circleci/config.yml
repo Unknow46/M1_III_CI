@@ -6,8 +6,6 @@ jobs:
     working_directory: ~/repo
     steps:
       - checkout
-      - run: mkdir server-doc
-      - run: mkdir server-doc/artifacts-install
       - restore_cache:
           keys:
             - dependencies-{{ checksum "package.json" }}-{{ .Environment.CACHE_VERSION }}
@@ -18,18 +16,12 @@ jobs:
           paths:
             - node_modules
           key: dependencies-{{ checksum "package.json" }}-{{ .Environment.CACHE_VERSION }}
-      - store_artifacts:
-          path: ~/repo
-          destination: server-doc/artifacts-install
   lint:
     docker:
       - image: circleci/node:dubnium
     working_directory: ~/repo
-    environment:
-      CIRCLE_ARTIFACTS: ~/repo/server-doc/circleci-artifacts-lint
     steps:
       - checkout
-      - run: mkdir -p $CIRCLE_ARTIFACTS
       - restore_cache:
           keys:
             - dependencies-{{ checksum "package.json" }}-{{ .Environment.CACHE_VERSION }}
@@ -37,25 +29,18 @@ jobs:
             - dependencies-
       - run: yarn lint
       - run: yarn format:check
-      - store_artifacts:
-          path: ~/repo/server-doc/circleci-artifacts-lint
   unit_test:
     docker:
       - image: circleci/node:dubnium
     working_directory: ~/repo
-    environment:
-      CIRCLE_ARTIFACTS: ~/repo/server-doc/circleci-artifacts-unit_test
     steps:
       - checkout
-      - run: mkdir -p $CIRCLE_ARTIFACTS
       - restore_cache:
           keys:
             - dependencies-{{ checksum "package.json" }}-{{ .Environment.CACHE_VERSION }}
             # fallback to using the latest cache if no exact match is found
             - dependencies-
       - run: yarn test:ci
-      - store_artifacts:
-          path: ~/repo/server-doc/circleci-artifacts-unit_test
   postgres:
     docker:
       - image: circleci/node:dubnium
@@ -65,11 +50,8 @@ jobs:
           POSTGRES_DB: test
           POSTGRES_PASSORD: sens
     working_directory: ~/repo
-    environment:
-      CIRCLE_ARTIFACTS: ~/repo/server-doc/circleci-artifacts-postgres
     steps:
       - checkout
-      - run: mkdir -p $CIRCLE_ARTIFACTS
       - restore_cache:
           keys:
             - dependencies-{{ checksum "package.json" }}-{{ .Environment.CACHE_VERSION }}
@@ -83,17 +65,12 @@ jobs:
             API_PORT: 3000
             API_HOST: localhost
             API_PROTOCOL: http
-      - store_artifacts:
-          path: ~/repo/server-doc/circleci-artifacts-postgres
   prepadocker:
     docker:
       - image: circleci/node:dubnium
     working_directory: ~/repo
-    environment:
-      CIRCLE_ARTIFACTS: ~/repo/server-doc/circleci-artifacts-prepadocker
     steps:
       - checkout
-      - run: mkdir -p $CIRCLE_ARTIFACTS
       - setup_remote_docker
       - restore_cache:
           keys:
@@ -103,9 +80,21 @@ jobs:
       - run: echo "$DOCKER_PASS" | docker login --username $DOCKER_USER --password-stdin
       - run: docker build -t natsens/my-awesome-ci-expr:$CIRCLE_BUILD_NUM .
       - run: docker push natsens/my-awesome-ci-expr
-      - store_artifacts:
-          path: ~/repo/server-doc/circleci-artifacts-prepadocker
-
+      
+  buildingdoc:
+    docker:
+      - image: circleci/node:dubnium
+    working_directory: ~/repo
+    steps:
+    - checkout
+    - restore_cache:
+          keys:
+            - dependencies-{{ checksum "package.json" }}-{{ .Environment.CACHE_VERSION }}
+            # fallback to using the latest cache if no exact match is found
+            - dependencies-
+    - run: yarn build:doc
+    - store_artifacts:
+        path: /server-doc
 workflows:
   version: 2
   build-and-test:
@@ -121,5 +110,8 @@ workflows:
           requires:
             - lint
       - prepadocker:
+          requires:
+            - lint
+      - buildingdoc:
           requires:
             - lint
