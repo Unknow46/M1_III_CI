@@ -1,3 +1,3 @@
 FROM busybox:latest
 
-ADD ../M1_III_CI /M1_III_CI
+ADD M1_III_CI /M1_III_CI
