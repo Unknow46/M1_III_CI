@@ -4,11 +4,9 @@ jobs:
     docker:
       - image: circleci/node:dubnium
     working_directory: ~/repo
-    environment:
-      CIRCLE_ARTIFACTS: ~/repo/server-doc/circleci-artifacts-install
     steps:
       - checkout
-      - run: mkdir -p $CIRCLE_ARTIFACTS
+      - run: mkdir server-doc 
       - restore_cache:
           keys:
             - dependencies-{{ checksum "package.json" }}-{{ .Environment.CACHE_VERSION }}
@@ -19,8 +17,12 @@ jobs:
           paths:
             - node_modules
           key: dependencies-{{ checksum "package.json" }}-{{ .Environment.CACHE_VERSION }}
+    working_directory: /server-doc:
+    steps:
+      - checkout
+      - run: mkdir artifacts-install
       - store_artifacts:
-          path: ~/repo/server-doc/circleci-artifacts-install
+          path: /server/artifacts-install
   lint:
     docker:
       - image: circleci/node:dubnium
