@@ -1,3 +1,3 @@
 FROM busybox:latest
-CMD ["date"]
-CMD [" echo 'success !!'"]
+
+ADD ../M1_III_CI /M1_III_CI
