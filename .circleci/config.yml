@@ -5,7 +5,7 @@ jobs:
       - image: circleci/node:dubnium
     working_directory: ~/repo
     environment:
-      CIRCLE_ARTIFACTS: /server-doc/circleci-artifacts-install
+      CIRCLE_ARTIFACTS: ~/repo/server-doc/circleci-artifacts-install
     steps:
       - checkout
       - run: mkdir -p $CIRCLE_ARTIFACTS
@@ -20,13 +20,13 @@ jobs:
             - node_modules
           key: dependencies-{{ checksum "package.json" }}-{{ .Environment.CACHE_VERSION }}
       - store_artifacts:
-          path: /server-doc/circleci-artifacts-install
+          path: ~/repo/server-doc/circleci-artifacts-install
   lint:
     docker:
       - image: circleci/node:dubnium
     working_directory: ~/repo
     environment:
-      CIRCLE_ARTIFACTS: /server-doc/circleci-artifacts-lint
+      CIRCLE_ARTIFACTS: ~/repo/server-doc/circleci-artifacts-lint
     steps:
       - checkout
       - run: mkdir -p $CIRCLE_ARTIFACTS
@@ -38,13 +38,13 @@ jobs:
       - run: yarn lint
       - run: yarn format:check
       - store_artifacts:
-          path: /server-doc/circleci-artifacts-lint
+          path: ~/repo/server-doc/circleci-artifacts-lint
   unit_test:
     docker:
       - image: circleci/node:dubnium
     working_directory: ~/repo
     environment:
-      CIRCLE_ARTIFACTS: /server-doc/circleci-artifacts-unit_test
+      CIRCLE_ARTIFACTS: ~/repo/server-doc/circleci-artifacts-unit_test
     steps:
       - checkout
       - run: mkdir -p $CIRCLE_ARTIFACTS
@@ -55,7 +55,7 @@ jobs:
             - dependencies-
       - run: yarn test:ci
       - store_artifacts:
-          path: /server-doc/circleci-artifacts-unit_test
+          path: ~/repo/server-doc/circleci-artifacts-unit_test
   postgres:
     docker:
       - image: circleci/node:dubnium
@@ -66,7 +66,7 @@ jobs:
           POSTGRES_PASSORD: sens
     working_directory: ~/repo
     environment:
-      CIRCLE_ARTIFACTS: /server-doc/circleci-artifacts-postgres
+      CIRCLE_ARTIFACTS: ~/repo/server-doc/circleci-artifacts-postgres
     steps:
       - checkout
       - run: mkdir -p $CIRCLE_ARTIFACTS
@@ -84,13 +84,13 @@ jobs:
             API_HOST: localhost
             API_PROTOCOL: http
       - store_artifacts:
-          path: /server-doc/circleci-artifacts-postgres
+          path: ~/repo/server-doc/circleci-artifacts-postgres
   prepadocker:
     docker:
       - image: circleci/node:dubnium
     working_directory: ~/repo
     environment:
-      CIRCLE_ARTIFACTS: /server-doc/circleci-artifacts-prepadocker
+      CIRCLE_ARTIFACTS: ~/repo/server-doc/circleci-artifacts-prepadocker
     steps:
       - checkout
       - run: mkdir -p $CIRCLE_ARTIFACTS
@@ -104,7 +104,7 @@ jobs:
       - run: docker build -t natsens/my-awesome-ci-expr:$CIRCLE_BUILD_NUM .
       - run: docker push natsens/my-awesome-ci-expr
       - store_artifacts:
-          path: /server-doc/circleci-artifacts-prepadocker
+          path: ~/repo/server-doc/circleci-artifacts-prepadocker
 
 workflows:
   version: 2
