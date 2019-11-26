@@ -76,8 +76,7 @@ jobs:
             - dependencies-{{ checksum "package.json" }}-{{ .Environment.CACHE_VERSION }}
             # fallback to using the latest cache if no exact match is found
             - dependencies-
-      - run: |
-          echo "$DOCKER_PASS" | docker login --username $DOCKER_USER --password-stdin
+      - run: echo "$DOCKER_PASS" | docker login --username $DOCKER_USER --password-stdin
       - run: docker build -t natsens/my-awesome-ci-expr:$CIRCLE_BUILD_NUM
       - run: docker push natsens/my-awesome-ci-expr
 
