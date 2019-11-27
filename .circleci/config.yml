@@ -91,7 +91,7 @@ jobs:
             - dependencies-{{ checksum "package.json" }}-{{ .Environment.CACHE_VERSION }}
             # fallback to using the latest cache if no exact match is found
             - dependencies-
-      - run: yarn run build:doc
+      - run: yarn run doc:build
       - store_artifacts:
           path: /server-doc
 workflows:
