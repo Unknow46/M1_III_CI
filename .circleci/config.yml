@@ -93,7 +93,7 @@ jobs:
             - dependencies-
       - run: yarn run doc:build
       - store_artifacts:
-          path: /doc-server
+          path: doc-server/
 workflows:
   version: 2
   build-and-test:
